@@ -1,0 +1,27 @@
+#
+# 0. Additional grants
+SQL|{deploytools}\script\grants.sql
+#
+# 1. Clear CC folder
+CMD|{deploytools}\script\deletefiles.cmd|{ows_work}\data\CC\*|R
+#
+# 2. Copy CC files
+#CMD|{deploytools}\script\distfiles.cmd|{repository}\config\cc_files\{version}\|*.txt|{ows_work}\data\cc\slot_|8
+#
+# 3. Copy custs
+CMD|{deploytools}\script\copyfiles.cmd|{repository}\cust\*.sql|{ows_work}\db\scripts\install\owsowner\cust\
+#
+# 4. Deploy hotfix
+#SSP|{repository}\owcore\hot_fix_cust.ssp
+#
+# 5. Deploy all sqls
+SSP|{repository}\1_modified_sql_increment.ssp
+#
+# 6. Compile invalid objects
+SSP|{ows_home}\db\scripts\oracle\tools\compinv2.sql
+#
+# 7. Copy additional tasks for scheduler
+CMD|{deploytools}\script\copyfiles.cmd|{deploytools}\task\*.xml|{ows_work}\client\way4manager\components\dbm.module\task\
+#
+# 8. Test scheduler
+SQL|{deploytools}\script\sch_job_inject.sql|/dbm.module/task/NI.Test_Scheduler.task.xml|120|3
